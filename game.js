@@ -1,9 +1,9 @@
 kaboom({
-	global: true,
-	fullscreen: true,
-	scale: 1.5,
-	debug: true,
-	clearColor: [0, 0, 0, 1]
+  global: true,
+  fullscreen: true,
+  scale: 1.5,
+  debug: true,
+  clearColor: [0, 0, 0, 1],
 });
 
 const MOVE_SPEED = 120;
@@ -27,201 +27,205 @@ loadSprite('pipe-top-right', 'hj2GK4n.png');
 loadSprite('pipe-bottom-left', 'c1cYSbt.png');
 loadSprite('pipe-bottom-right', 'nqQ79eI.png');
 
-scene('game', ({level, score}) => {
-	layers(['bg', 'obj', 'ui'], 'obj');
+scene('game', ({ level, score }) => {
+  layers(['bg', 'obj', 'ui'], 'obj');
 
-	const maps = [
-		[
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'        $     =*=%=                              ',
-			'                                                 ',
-			'                                 -+              ',
-			'                          ^  ^   ()              ',
-			'===================================   ===========',
-		],
-		[
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'        $     =*=%=                              ',
-			'                                                 ',
-			'                                 -+   -+         ',
-			'                     ^    ^  ^   ()   ()         ',
-			'===================================   ===========',
-		],
-		[
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'                                                 ',
-			'               ^ ^                               ',
-			'        $     =*=%=                              ',
-			'                                                 ',
-			'                                 -+              ',
-			'                          ^  ^   ()              ',
-			'===================================   ===========',
-		],
-	];
+  const maps = [
+    [
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '        $     =*=%=                              ',
+      '                                                 ',
+      '                                 -+              ',
+      '                          ^  ^   ()              ',
+      '===================================   ===========',
+    ],
+    [
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '        $     =*=%=                              ',
+      '                                                 ',
+      '                                 -+   -+         ',
+      '                     ^    ^  ^   ()   ()         ',
+      '===================================   ===========',
+    ],
+    [
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '                                                 ',
+      '               ^ ^                               ',
+      '        $     =*=%=                              ',
+      '                                                 ',
+      '                                 -+              ',
+      '                          ^  ^   ()              ',
+      '===================================   ===========',
+    ],
+  ];
 
-	const levelConfig = {
-		width: 20,
-		height: 20,
-		'=': [sprite('block'), solid()],
-		'$': [sprite('coin'), 'coin'],
-		'%': [sprite('surprise'), solid(), 'coin-surprise'],
-		'*': [sprite('surprise'), solid(), 'mushroom-surprise'],
-		'}': [sprite('unboxed'), solid()],
-		'(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
-		')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
-		'-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
-		'+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
-		'^': [sprite('evil-shroom'), solid(), 'dangerous', body()],
-		'#': [sprite('mushroom'), solid(), 'mushroom', body()]
-	};
+  const levelConfig = {
+    width: 20,
+    height: 20,
+    '=': [sprite('block'), solid()],
+    $: [sprite('coin'), 'coin'],
+    '%': [sprite('surprise'), solid(), 'coin-surprise'],
+    '*': [sprite('surprise'), solid(), 'mushroom-surprise'],
+    '}': [sprite('unboxed'), solid()],
+    '(': [sprite('pipe-bottom-left'), solid(), scale(0.5)],
+    ')': [sprite('pipe-bottom-right'), solid(), scale(0.5)],
+    '-': [sprite('pipe-top-left'), solid(), scale(0.5), 'pipe'],
+    '+': [sprite('pipe-top-right'), solid(), scale(0.5), 'pipe'],
+    '^': [sprite('evil-shroom'), solid(), 'dangerous', body()],
+    '#': [sprite('mushroom'), solid(), 'mushroom', body()],
+  };
 
-	const gameLevel = addLevel(maps[level], levelConfig);
+  const gameLevel = addLevel(maps[level], levelConfig);
 
-	function big() {
-		let timer = 0;
-		let isBig = false;
-		return {
-			update() {
-				if (isBig) {
-					timer -= dt();
-					if (timer <= 0) {
-						this.smallify();
-					}
-				}
-			},
-			isBig() {
-				return isBig;
-			},
-			smallify() {
-				CURRENT_JUMP_FORCE = JUMP_FORCE
-				this.scale = vec2(1);
-				timer = 0;
-				isBig = false;
-			},
-			biggify(time) {
-				CURRENT_JUMP_FORCE = BIG_JUMP_FORCE;
-				this.scale = vec2(2);
-				timer = time;
-				isBig = true;
-			}
-		}
-	}
-	const player = add([
-		sprite('mario'),
-		solid(),
-		pos(30, 0),
-		body(),
-		big(),
-		origin('bot')
-	]);
+  function big() {
+    let timer = 0;
+    let isBig = false;
+    return {
+      update() {
+        if (isBig) {
+          timer -= dt();
+          if (timer <= 0) {
+            this.smallify();
+          }
+        }
+      },
+      isBig() {
+        return isBig;
+      },
+      smallify() {
+        CURRENT_JUMP_FORCE = JUMP_FORCE;
+        this.scale = vec2(1);
+        timer = 0;
+        isBig = false;
+      },
+      biggify(time) {
+        CURRENT_JUMP_FORCE = BIG_JUMP_FORCE;
+        this.scale = vec2(2);
+        timer = time;
+        isBig = true;
+      },
+    };
+  }
+  const player = add([
+    sprite('mario'),
+    solid(),
+    pos(30, 0),
+    body(),
+    big(),
+    origin('bot'),
+  ]);
 
-	const scoreLable = add([
-		text(score),
-		pos(30, 6),
-		layer('ui'),
-		{
-			value: score
-		}
-	]);
+  const scoreLable = add([
+    text(score),
+    pos(30, 6),
+    layer('ui'),
+    {
+      value: score,
+    },
+  ]);
 
-	action('mushroom', (m) => {
-		m.move(10, 0);
-	});
-	
-	player.on('headbump', (obj) => {
-		if (obj.is('coin-surprise')) {
-			gameLevel.spawn('$', obj.gridPos.sub(0, 1));
-			destroy(obj);
-			gameLevel.spawn('}', obj.gridPos.sub(0, 0));
-		}
-		if (obj.is('mushroom-surprise')) {
-			gameLevel.spawn('#', obj.gridPos.sub(0, 1));
-			destroy(obj);
-			gameLevel.spawn('}', obj.gridPos.sub(0, 0));
-		}
-	});
+  action('mushroom', (m) => {
+    m.move(10, 0);
+  });
 
-	player.collides('mushroom', (m) => {
-		destroy(m);
-		player.biggify(6);
-	});
+  player.on('headbump', (obj) => {
+    if (obj.is('coin-surprise')) {
+      gameLevel.spawn('$', obj.gridPos.sub(0, 1));
+      destroy(obj);
+      gameLevel.spawn('}', obj.gridPos.sub(0, 0));
+    }
+    if (obj.is('mushroom-surprise')) {
+      gameLevel.spawn('#', obj.gridPos.sub(0, 1));
+      destroy(obj);
+      gameLevel.spawn('}', obj.gridPos.sub(0, 0));
+    }
+  });
 
-	player.collides('coin', (c) => {
-		destroy(c);
-		scoreLable.value++;
-		scoreLable.text = scoreLable.value;
-	});
+  player.collides('mushroom', (m) => {
+    destroy(m);
+    player.biggify(6);
+  });
 
-	action('dangerous', (d) => {
-		d.move(-ENEMY_SPEED, 0);
-	});
+  player.collides('coin', (c) => {
+    destroy(c);
+    scoreLable.value++;
+    scoreLable.text = scoreLable.value;
+  });
 
-	let isJumping = true;
-	player.collides('dangerous', (d) => {
-		if (isJumping) {
-			destroy(d);
-			scoreLable.value++;
-		} else {
-			go('lose', {score: scoreLable.value});
-		}
-	});
+  action('dangerous', (d) => {
+    d.move(-ENEMY_SPEED, 0);
+  });
 
-	player.action(() => {
-		camPos(player.pos);
-		if (player.pos.y >= FALL_DEATH) {
-			go('lose', {score: scoreLable.value});
-		}
-	});
+  let isJumping = true;
+  player.collides('dangerous', (d) => {
+    if (isJumping) {
+      destroy(d);
+      scoreLable.value++;
+    } else {
+      go('lose', { score: scoreLable.value });
+    }
+  });
 
-	player.collides('pipe', () => {
-		keyPress('down', () => {
-			if (level < maps.length - 1) {
-				go('game', {
-					level: level + 1,
-					score: scoreLable.value
-				});
-			} else {
-				go('maintain');
-			}
-		});
-	});
+  player.action(() => {
+    camPos(player.pos);
+    if (player.pos.y >= FALL_DEATH) {
+      go('lose', { score: scoreLable.value });
+    }
+  });
 
-	keyDown('left', () => {
-		player.move(-MOVE_SPEED, 0);
-	});
-	keyDown('right', () => {
-		player.move(MOVE_SPEED, 0);
-	});
-	keyPress('space', () => {
-		if (player.grounded()) {
-			isJumping = true;
-			player.jump(CURRENT_JUMP_FORCE);
-		}
-	});
+  player.collides('pipe', () => {
+    keyPress('down', () => {
+      if (level < maps.length - 1) {
+        go('game', {
+          level: level + 1,
+          score: scoreLable.value,
+        });
+      } else {
+        go('maintain');
+      }
+    });
+  });
 
-	player.action(() => {
-		if (player.grounded()) {
-			isJumping = false;
-		}
-	});
+  keyDown('left', () => {
+    player.move(-MOVE_SPEED, 0);
+  });
+  keyDown('right', () => {
+    player.move(MOVE_SPEED, 0);
+  });
+  keyPress('space', () => {
+    if (player.grounded()) {
+      isJumping = true;
+      player.jump(CURRENT_JUMP_FORCE);
+    }
+  });
+
+  player.action(() => {
+    if (player.grounded()) {
+      isJumping = false;
+    }
+  });
 });
 
-scene('lose', ({score}) => {
-	add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)]);
+scene('lose', ({ score }) => {
+  add([text(score, 32), origin('center'), pos(width() / 2, height() / 2)]);
 });
 
 scene('maintain', () => {
-	add([text('The next level is coming soon!', 30), origin('center'), pos(width() / 2, height() / 2)]);
-})
+  add([
+    text('The next level is coming soon!', 30),
+    origin('center'),
+    pos(width() / 2, height() / 2),
+  ]);
+});
 
-start('game', {level: 2, score: 0});
+start('game', { level: 0, score: 0 });
